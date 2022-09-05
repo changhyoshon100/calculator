@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>계산기</title>
+  <style>
+    * { box-sizing: border-box }
+    #result { width: 180px; height: 50px; margin: 5px; text-align: right }
+    #operator { width: 50px; height: 50px; margin: 5px; text-align: center }
+    button { width: 50px; height: 50px; margin: 5px }
+  </style>
+</head>
+
+<!--계산기버튼구현-->
+<body>
+  <input readonly id="operator">
+  <input readonly id="result">
+  <div class="row">
+    <button id="num-7">7</button>
+    <button id="num-8">8</button>
+    <button id="num-9">9</button>
+    <button id="plus">+</button>
+  </div>
+  <div class="row">
+    <button id="num-4">4</button>
+    <button id="num-5">5</button>
+    <button id="num-6">6</button>
+    <button id="minus">-</button>
+  </div>
+  <div class="row">
+    <button id="num-1">1</button>
+    <button id="num-2">2</button>
+    <button id="num-3">3</button>
+    <button id="divide">/</button>
+  </div>
+  <div class="row">
+    <button id="clear">C</button>
+    <button id="num-0">0</button>
+    <button id="calculate">=</button>
+    <button id="multiply">x</button>
+  </div>
+<script>
+    let numOne = '';
+    let tempNumOne = '';
+    let operator = '';
+    let numTwo = '';
+    let conn1 = '';
+    let eql = '';
+    let num = '';
+    let result = 0;
+    let calculatedVal = '';
+    let $operator = document.getElementById('operator');
+    let $result = document.getElementById('result');
+
+    let onClickNumber = (event) => () => {
+        let add = '';
+
+        if(operator){ 
+            if(!eql){
+                numTwo += event;
+                add += numTwo;
+                $result.value = Number(numTwo);
+            }
+        }
+        if(operator == ''){//(!operator)
+            numOne += event;
+            add += numOne;
+            $result.value = numOne;
+        }
+
+        if(eql){
+            numTwo = '';
+            num += event;//4
+            $result.value = num;
+            conn1 = num;
+            
+            return num;
+        }
+          
+        conn1 = add;
+        return conn1;
+    }
+
+    const onClickOperator = (op) => () => {
+        if(conn1){//exist
+            operator = op;
+            numOne = Number($result.value);
+            conn1 = '';
+            
+        }else{//not exist
+            alert('Put number first!');
+        }   
+        
+        $operator.value = operator;
+        return operator;
+    }
+
+    const onClickResult = (equal) => () => {
+        eql = equal;
+        if(operator){
+            if(numTwo == ''){
+                numTwo = Number(num);
+                numOne = Number(tempNumOne);
+            }
+        switch(operator) {
+            case '+':
+                $result.value = Number(numOne) + Number(numTwo);
+                tempNumOne = Number($result.value);
+                num = '';
+            break;
+            case '-':
+                $result.value = Number(numOne) - Number(numTwo);
+                tempNumOne = Number($result.value);
+                num = '';
+            break;
+            case '*':
+                $result.value = Number(numOne) * Number(numTwo);
+                tempNumOne = Number($result.value);
+                num = '';
+            break;
+            case '/':
+                $result.value = Number(numOne) / Number(numTwo);
+                tempNumOne = Number($result.value);
+                num = '';
+            break;
+            default:
+            // code block
+            break;
+        }
+        }else{
+            alert('You should put operator first!');
+        }
+        
+        operator = '';
+    }
+
+    const onClickClear = (clr) => () => {
+        numOne = '';
+        operator = '';
+        numTwo = '';
+        conn1 = '';
+        
+        $result.value = '';
+        $operator.value = '';
+    }
+
+    document.querySelector('#num-0').addEventListener('click', onClickNumber('0'));
+    document.querySelector('#num-1').addEventListener('click', onClickNumber('1'));
+    document.querySelector('#num-2').addEventListener('click', onClickNumber('2'));
+    document.querySelector('#num-3').addEventListener('click', onClickNumber('3'));
+    document.querySelector('#num-4').addEventListener('click', onClickNumber('4'));
+    document.querySelector('#num-5').addEventListener('click', onClickNumber('5'));
+    document.querySelector('#num-6').addEventListener('click', onClickNumber('6'));
+    document.querySelector('#num-7').addEventListener('click', onClickNumber('7'));
+    document.querySelector('#num-8').addEventListener('click', onClickNumber('8'));
+    document.querySelector('#num-9').addEventListener('click', onClickNumber('9'));
+
+    document.querySelector('#plus').addEventListener('click', onClickOperator('+'));
+    document.querySelector('#minus').addEventListener('click', onClickOperator('-'));
+    document.querySelector('#divide').addEventListener('click', onClickOperator('/'));
+    document.querySelector('#multiply').addEventListener('click', onClickOperator('*'));
+
+    document.querySelector('#calculate').addEventListener('click', onClickResult('='));
+
+    document.querySelector('#clear').addEventListener('click', onClickClear('C'));
+
+</script>
